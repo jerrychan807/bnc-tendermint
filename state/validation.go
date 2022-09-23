@@ -12,7 +12,7 @@ import (
 
 //-----------------------------------------------------
 // Validate block
-
+// 验证块
 func validateBlock(evidencePool EvidencePool, stateDB dbm.DB, state State, block *types.Block, withAppStat bool) error {
 	// Validate internal consistency.
 	if err := block.ValidateBasic(); err != nil {

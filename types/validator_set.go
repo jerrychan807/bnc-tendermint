@@ -588,6 +588,7 @@ func (vals *ValidatorSet) UpdateWithChangeSet(changes []*Validator) error {
 }
 
 // Verify that +2/3 of the set had signed the given signBytes.
+// 是否获得了+2/3的投票权
 func (vals *ValidatorSet) VerifyCommit(chainID string, blockID BlockID, height int64, commit *Commit) error {
 
 	if err := commit.ValidateBasic(); err != nil {
