@@ -118,6 +118,8 @@ func TestUnmarshalValidatorKey(t *testing.T) {
 	privKey := ed25519.GenPrivKey()
 	pubKey := privKey.PubKey()
 	addr := pubKey.Address()
+	//pubStr := pubKey.(ed25519.PubKeyEd25519)
+	fmt.Println((pubKey.(ed25519.PubKeyEd25519)).String())
 	pubArray := [32]byte(pubKey.(ed25519.PubKeyEd25519))
 	pubBytes := pubArray[:]
 	privArray := [64]byte(privKey)
@@ -136,7 +138,7 @@ func TestUnmarshalValidatorKey(t *testing.T) {
     "value": "%s"
   }
 }`, addr, pubB64, privB64)
-
+	fmt.Println(serialized)
 	val := FilePVKey{}
 	err := cdc.UnmarshalJSON([]byte(serialized), &val)
 	require.Nil(err, "%+v", err)
@@ -149,7 +151,36 @@ func TestUnmarshalValidatorKey(t *testing.T) {
 	// export it and make sure it is the same
 	out, err := cdc.MarshalJSON(val)
 	require.Nil(err, "%+v", err)
+	fmt.Println(out)
 	assert.JSONEq(serialized, string(out))
+}
+
+func TestUnmarshalValidatorKeyTemp(t *testing.T) {
+	//assert, require := assert.New(t), require.New(t)
+
+	serialized := fmt.Sprintf(`{
+  "address": "931B028E3A2B6C045D0E4579470E9E50847029A2",
+  "pub_key": {
+    "type": "tendermint/PubKeyEd25519",
+    "value": "+dC/2i1cfw/ZcHZvsxt8dDXxbl1EnClGeckR4o4vUUo="
+  },
+  "priv_key": {
+    "type": "tendermint/PrivKeyEd25519",
+    "value": "B8z+AJ9+wtAoeMWShtlZ1BVewYp9UtD+LRMXoE8ITGX50L/aLVx/D9lwdm+zG3x0NfFuXUScKUZ5yRHiji9RSg=="
+  }
+}`)
+	fmt.Println(serialized)
+	val := FilePVKey{}
+	err := cdc.UnmarshalJSON([]byte(serialized), &val)
+	//require.Nil(err, "%+v", err)
+	fmt.Println(err)
+
+	// make sure the values match
+	//assert.EqualValues(addr, val.Address)
+	//assert.EqualValues(pubKey, val.PubKey)
+	//assert.EqualValues(privKey, val.PrivKey)
+	fmt.Println(val.Address)
+	fmt.Println((val.PubKey.(ed25519.PubKeyEd25519)).String())
 }
 
 func TestSignVote(t *testing.T) {
